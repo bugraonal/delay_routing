@@ -1,6 +1,7 @@
 from .graph import graph
 import random
 import subprocess
+import os
 
 class spice:
     def __init__(self, graph, name):
@@ -30,12 +31,16 @@ class spice:
             f.write(".end\n")
     
     def run_sim(self):
-        mpi_cmd = "/home/bugra/OpenRAM/miniconda/bin/mpirun -np 4"
+        conda = os.environ["OPENRAM_HOME"] + "/../miniconda"
+        mpi_exe = conda + "/bin/mpirun"
+        xyce_exe = conda + "/bin/Xyce"
+        conda_activate = conda + "/bin/activate"
+        mpi_cmd = "{} -np 4".format(mpi_exe)
         # Xyce can save a raw file while doing timing, so keep it around
         cmd = "source {3} && {0} {1} -r {2}.raw -o {2}.lis {2} && conda deactivate".format(mpi_cmd,
-                                                                                                 "/home/bugra/OpenRAM/miniconda/bin/Xyce",
-                                                                                                 self.name,
-                                                                                                 "/home/bugra/OpenRAM/miniconda/bin/activate")
+                                                                                           xyce_exe,
+                                                                                           self.name,
+                                                                                           conda_activate)
         
         subprocess.run(cmd, shell=True)
 

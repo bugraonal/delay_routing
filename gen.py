@@ -1,20 +1,22 @@
 from src.graph import graph
 from src.spice import spice
 
-g1 = graph(5, "g1")
-g2 = graph(5, "g2")
+import sys
 
-g1.generate()
-g1.render()
+if len(sys.argv) < 3:
+    print("Usage: python gen.py <num_graphs> <num_nodes>")
+    exit(-1)
 
-g2.generate()
-g2.render()
+num_graphs = int(sys.argv[1])
+num_nodes = int(sys.argv[2])
 
-sp1 = spice(g1, "g1.sp")
-sp2 = spice(g1, "g1.sp")
+for n in range(num_graphs):
+    g = graph(num_nodes, "g{}".format(n))
 
-sp1.generate()
-sp1.run_sim()
+    g.generate()
+    g.render()
 
-sp2.generate()
-sp2.run_sim()
+    sp = spice(g, "g{}.sp".format(n))
+
+    sp.generate()
+    sp.run_sim()

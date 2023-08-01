@@ -2,3 +2,5 @@
 *.sp
 *.lis.mt0
 *.raw
+*.gv
+**/*.pyc
